@@ -765,119 +765,86 @@ function setHomepagea1067869a()
         <h2>搜索结果</h2>
       </div>
 
-      <div class="ny-right">
-        <div class="position">
-          <div class="clearfix">
-            <h3>搜索结果</h3>
-          </div>
-        </div>
+<div class="ny-right">
+  <div class="position">
+    <div class="clearfix">
+      <h3>搜索结果</h3>
+    </div>
+  </div>
 
-        <div class="text-list">
-          <div id="searchMeta" class="search-meta"></div>
-          <ul id="resultList" class="result-list"></ul>
-          <div id="emptyBox" class="search-empty" style="display:none;">
-            找不到和您的查询 <b id="emptyKw"></b> 相符的内容。<br><br>
-            建议：
-            <ul>
-              <li>检查关键词是否有误。</li>
-              <li>尝试更换其他关键词。</li>
-              <li>使用更常见的词语。</li>
-            </ul>
-          </div>
-        </div>
+  <!-- 结果列表容器 -->
+  <div class="text-list" id="results"></div>
+</div>
+
+<!-- 内联搜索脚本：不用 search.json -->
+<script>
+  // 1) 在这里维护你的可检索页面索引（标题、链接、关键词摘要）
+  // url 请写成相对 ssjgy.htm 的路径
+  const INDEX = [
+    { title: "首页", url: "index.htm", text: "药学前沿 课程 校企共建 产教共生 教学成果 奖" },
+    { title: "申报书", url: "sbs.htm", text: "申报书 成果简介 教学问题 解决方法 创新点 推广 应用" },
+    { title: "成果研究背景", url: "cgbg/cgyjbj.htm", text: "研究背景 教学改革 课程目标 立体化建设" },
+    { title: "成果发展历程", url: "cgbg/cgfzlc.htm", text: "发展历程 建设阶段 时间线 里程碑" },
+    { title: "成果主要研究内容", url: "cgbg/cgzyyjnr.htm", text: "研究内容 课程体系 教学方法 实践" },
+    { title: "成果推广与应用", url: "cgbg/cgtgyyy.htm", text: "推广 应用 示范 效果" },
+    { title: "省级及以上教改项目", url: "zccl1/sjjysjgxm.htm", text: "教改项目 立项 批文 证明材料" },
+    { title: "科研项目", url: "zccl1/kyxm.htm", text: "科研 项目 教学改革 支撑材料" },
+    { title: "教学改革论文", url: "zccl1/jxgglw.htm", text: "论文 发表 成果 支撑材料" },
+    { title: "成果应用证明", url: "cgpj/cgyyzm.htm", text: "应用 证明 评价 典型案例" }
+    // ...后续按需继续补充
+  ];
+
+  // 2) 读取 ?q= 关键词
+  function getQuery() {
+    const q = new URLSearchParams(location.search).get('q') || '';
+    return decodeURIComponent(q).trim();
+  }
+
+  // 3) 关键字高亮
+  function hilite(text, kw){
+    if(!kw) return text;
+    const esc = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replace(new RegExp(esc, 'ig'), m => `<span style="background:#fff59d">${m}</span>`);
+  }
+
+  // 4) 渲染结果
+  (function render(){
+    const q = getQuery();
+    const box = document.getElementById('results');
+
+    if(!q){
+      box.innerHTML = `<div style="color:#666;padding:12px 0">请输入关键词后搜索。</div>`;
+      return;
+    }
+
+    const kw = q.toLowerCase();
+    // 朴素匹配：标题或文本中包含关键词
+    const hit = INDEX.filter(it =>
+      (it.title||'').toLowerCase().includes(kw) ||
+      (it.text||'').toLowerCase().includes(kw)
+    );
+
+    if(hit.length === 0){
+      box.innerHTML = `
+        <div style="color:#666;padding:12px 0">
+          找不到与 "<b>${q}</b>" 相符的内容。<br><br>
+          建议：检查关键词是否有误，或换用更常见的词语。
+        </div>`;
+      return;
+    }
+
+    box.innerHTML = hit.map(it => `
+      <div style="padding:12px 0;border-bottom:1px solid #eee">
+        <a href="${it.url}" style="font-size:16px;font-weight:600;text-decoration:none">
+          ${hilite(it.title, q)}
+        </a>
+        <p style="margin:6px 0 0;color:#555">${hilite((it.text||'').slice(0,120), q)}...</p>
+        <div style="font-size:12px;color:#888">${it.url}</div>
       </div>
+    `).join('');
+  })();
+</script>
 
-      <div class="clear"></div>
-    </div>
-  </div>
-
-  <div class="foot">
-    <div class="px1220">
-      <p>地址：山东省烟台市莱山区清泉路30号&nbsp;&nbsp;@版权所有 烟台大学教学成果奖</p>
-    </div>
-  </div>
-
-  <script src="js/index.js"></script>
-
-  <!-- 简易前端搜索实现 -->
-  <script>
-    // 1) 站内“可搜索”数据（示例）。按需增删即可。
-    //    title: 显示标题；url: 点击跳转；content: 用于匹配的摘要/正文片段
-    const SEARCH_INDEX = [
-      { title: "申报书", url: "sbs.htm", content: "教学成果 申报书 药学前沿 产教共生 校企共建" },
-      { title: "成果研究背景", url: "cgbg/cgyjbj.htm", content: "成果背景 课程建设 研究生课程 立体化建设" },
-      { title: "成果发展历程", url: "cgbg/cgfzlc.htm", content: "发展历程 建设过程 阶段性成果" },
-      { title: "成果主要研究内容", url: "cgbg/cgzyyjnr.htm", content: "研究内容 药学前沿 课程模块" },
-      { title: "成果推广与应用", url: "cgbg/cgtgyyy.htm", content: "推广 应用 效果 典型案例" },
-      { title: "省级及以上教改项目", url: "zccl1/sjjysjgxm.htm", content: "教改项目 省级 以上 项目列表" },
-      { title: "教学改革论文", url: "zccl1/jxgglw.htm", content: "论文 教学改革 发表 期刊" },
-      { title: "省级及以上获奖证书", url: "zccl1/sjjyshjzs.htm", content: "获奖 证书 省级 以上" },
-      { title: "成果应用证明", url: "cgpj/cgyyzm.htm", content: "应用 证明 评价 佐证 材料" },
-      { title: "主要完成人 - 于吉红", url: "zywcr/yjh.htm", content: "主要完成人 于吉红 教授 团队" }
-    ];
-
-    // 2) 读取关键词
-    function getQuery(name){
-      const p = new URLSearchParams(location.search);
-      return (p.get(name) || "").trim();
-    }
-
-    // 3) 文本高亮
-    function highlight(text, kw){
-      if(!kw) return text;
-      const esc = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return text.replace(new RegExp(esc, "gi"), m => `<span class="keywordfontcolor1067886">${m}</span>`);
-    }
-
-    // 4) 运行搜索并渲染
-    (function runSearch(){
-      const kw = getQuery("q");
-      const meta = document.getElementById("searchMeta");
-      const list = document.getElementById("resultList");
-      const emptyBox = document.getElementById("emptyBox");
-      const emptyKw = document.getElementById("emptyKw");
-
-      // 表单回填
-      const pc = document.getElementById("q_pc");
-      const m = document.getElementById("q_m");
-      if(pc) pc.value = kw;
-      if(m) m.value = kw;
-
-      if(!kw){
-        meta.textContent = "请输入关键词进行搜索。";
-        emptyBox.style.display = "block";
-        emptyKw.textContent = "（空）";
-        return;
-      }
-
-      // 简单匹配：标题或内容包含关键词（不区分大小写）
-      const kwLower = kw.toLowerCase();
-      const results = SEARCH_INDEX.filter(item =>
-        (item.title && item.title.toLowerCase().includes(kwLower)) ||
-        (item.content && item.content.toLowerCase().includes(kwLower))
-      );
-
-      meta.innerHTML = `共找到 <b>${results.length}</b> 条与 “<b class="keywordfontcolor1067886">${kw}</b>” 相关的结果：`;
-      list.innerHTML = "";
-      emptyBox.style.display = results.length ? "none" : "block";
-      emptyKw.textContent = `"${kw}"`;
-
-      if(!results.length) return;
-
-      // 渲染列表
-      const frag = document.createDocumentFragment();
-      results.forEach(r => {
-        const li = document.createElement("li");
-        li.className = "result-item";
-        li.innerHTML = `
-          <a href="${r.url}">${highlight(r.title, kw)}</a>
-          <p>${highlight((r.content || "").slice(0, 120))}</p>
-        `;
-        frag.appendChild(li);
-      });
-      list.appendChild(frag);
-    })();
-  </script>
     <script>
   $(function () {
     // 点右侧 <span> 展开/收起子菜单
@@ -907,3 +874,4 @@ function setHomepagea1067869a()
 </script>
 </body>
 </html>
+
