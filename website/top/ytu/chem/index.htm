@@ -1173,13 +1173,25 @@ function setHomepagea1067869a()
 </script>
 
 <script>
-    if (window.location.href.indexOf("405") !== -1) {
-        window.location.href = "ssjgy.htm";
-    }
+    window.onload = function() {
+        try {
+            // 检查某个页面或资源的状态
+            fetch(window.location.href)
+                .then(response => {
+                    if (response.status === 405) {
+                        window.location.href = "ssjgy.htm";
+                    }
+                })
+                .catch(error => console.error('Error checking 405 status:', error));
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 </script>
 
     </body>
 
 </html>
+
 
 
