@@ -160,7 +160,7 @@ function setHomepagea1067862a()
 <form action="ssjgy.htm?wbtreeid=1115" method="post" id="au3a" name="au3a" onsubmit="return _nl_ys_check()" style="display: inline">
  <input type="hidden" id="lucenenewssearchkey1067864" name="lucenenewssearchkey" value=""><input type="hidden" id="_lucenesearchtype1067864" name="_lucenesearchtype" value="1"><input type="hidden" id="searchScope1067864" name="searchScope" value="0">
 
- <input type="text" name="showkeycode" id="showkeycode1067864" value="" placeholder="请输入关键词" class="text" autocomplete="off" />
+ <input type="text" name="q" id="showkeycode1067864" value="" placeholder="请输入关键词" class="text" autocomplete="off" />
                         <input type="submit" value="" class="button" />
 
 
@@ -517,7 +517,7 @@ function setHomepagea1067869a()
 <form action="ssjgy.htm?wbtreeid=1115" method="post" id="au7a" name="au7a" onsubmit="return _nl_ys_check1()" style="display: inline">
  <input type="hidden" id="lucenenewssearchkey1067870" name="lucenenewssearchkey" value=""><input type="hidden" id="_lucenesearchtype1067870" name="_lucenesearchtype" value="1"><input type="hidden" id="searchScope1067870" name="searchScope" value="0">
 
- <input type="text" placeholder="请输入关键词" name="showkeycode" id="showkeycode1067870" autocomplete="off">
+ <input type="text" placeholder="请输入关键词" name="q" id="showkeycode1067870" autocomplete="off">
                     <input type="image" src="img/fdj.png">
 
 </form>
@@ -758,7 +758,7 @@ function setHomepagea1067869a()
                     <div class=""><span>当前位置：</span>
                         <a href="index.htm">首页</a>
               <span>-></span>
-                <a href="sbs.htm">搜索结果</a>
+                <a href="ssjgy.htm">搜索结果</a>
 </div>
                 </div>
       <div class="channl-menu leftNav">
@@ -872,6 +872,31 @@ function setHomepagea1067869a()
     });
   });
 </script>
+<script>
+// 不改原表单/脚本，仅在提交时改为 GET 跳到 ?q=xxx
+(function () {
+  function hook(formId, inputId) {
+    var f = document.getElementById(formId);
+    var kwInput = document.getElementById(inputId);
+    if (!f || !kwInput) return;
+
+    f.addEventListener('submit', function (e) {
+      // 允许原 onsubmit 校验运行，但最终我们统一改为跳转
+      var kw = (kwInput.value || '').trim();
+      if (!kw) { alert('请输入你要检索的内容！'); e.preventDefault(); return false; }
+      e.preventDefault();
+      var url = 'ssjgy.htm?q=' + encodeURIComponent(kw);
+      window.location.href = url;
+      return false;
+    }, true);
+  }
+  // PC 表单：id="au3a"，输入框 id="showkeycode1067864"
+  hook('au3a', 'showkeycode1067864');
+  // 移动端表单：id="au7a"，输入框 id="showkeycode1067870"
+  hook('au7a', 'showkeycode1067870');
+})();
+</script>            
 </body>
 </html>
+
 
