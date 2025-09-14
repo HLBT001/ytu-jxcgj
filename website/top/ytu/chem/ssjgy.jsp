@@ -723,37 +723,78 @@ function setHomepagea1067869a()
                             <h3>搜索结果</h3>
                         </div>
                     </div>
-                    <div class="text-list">
+<div class="text-list">
+  <!-- 结果列表容器 -->
+  <div id="results"></div>
+</div>
 
-</script><script type="text/javascript">
-     function checksearchu9()
-     { 
-            var keyword = document.getElementById("newskeycode1067886").value 
-            if(keyword==null||keyword=="")
-            { 
-            alert("请输入你要检索的内容！"); 
-            return false; 
-            } 
-            if(window.toFF==1) 
-            { 
-            document.getElementById("newskeycode21067886").value = Simplized(keyword ); 
-            }
-            else 
-            { 
-            document.getElementById("newskeycode21067886").value = keyword; 
-            } 
-            document.getElementById('_lucenesearchtype1067886').value=2; 
-            var base64 = new Base64(); 
-            document.getElementById("newskeycode21067886").value=base64.encode(document.getElementById("newskeycode21067886").value); 
-            document.getElementById("newskeycode1067886").disabled=true; return true; } </script> 
-          
- <table style="FONT-FAMILY: 宋体; COLOR: #222222; FONT-SIZE: 14px;margin-top: 20px;" cellspacing=1 cellpadding=0 border=0 width="100%"> <tr> <td style="    word-break: break-word;"> 找不到和您的查询&nbsp;" <B>  </B> " &nbsp;相符的新闻。 <br> <br> </td> </tr> <tr> <td> 建议: </td> </tr> <tr> <td> <ul> &nbsp;&nbsp;&nbsp;&nbsp; <li> 请检查输入字词有无错误。</li><li> 请换用另外的查询字词。</li><li> 请改用较常见的字词。</li> </ul> </td> </tr> </table> 
-                                             </div>
-                </div>
+<!-- 内联搜索脚本：读取 ?q= 并在前端渲染 -->
+<script>
+  // 1) 可检索页面索引（标题、链接、关键词摘要）
+  // url 写成相对 ssjgy.htm 的路径
+  const INDEX = [
+    { title: "首页", url: "index.htm", text: "药学前沿 课程 校企共建 产教共生 教学成果 奖" },
+    { title: "申报书", url: "sbs.htm", text: "申报书 成果简介 教学问题 解决方法 创新点 推广 应用" },
+    { title: "成果研究背景", url: "cgbg/cgyjbj.htm", text: "研究背景 教学改革 课程目标 立体化建设" },
+    { title: "成果发展历程", url: "cgbg/cgfzlc.htm", text: "发展历程 建设阶段 时间线 里程碑" },
+    { title: "成果主要研究内容", url: "cgbg/cgzyyjnr.htm", text: "研究内容 课程体系 教学方法 实践" },
+    { title: "成果推广与应用", url: "cgbg/cgtgyyy.htm", text: "推广 应用 示范 效果" },
+    { title: "省级及以上教改项目", url: "zccl1/sjjysjgxm.htm", text: "教改项目 立项 批文 证明材料" },
+    { title: "科研项目", url: "zccl1/kyxm.htm", text: "科研 项目 教学改革 支撑材料" },
+    { title: "教学改革论文", url: "zccl1/jxgglw.htm", text: "论文 发表 成果 支撑材料" },
+    { title: "成果应用证明", url: "cgpj/cgyyzm.htm", text: "应用 证明 评价 典型案例" }
+    // ……按需补充
+  ];
 
-                <div class="clear"></div>
-            </div>
-        </div>
+  // 2) 读取 ?q=
+  function getQuery() {
+    const q = new URLSearchParams(location.search).get('q') || '';
+    return decodeURIComponent(q).trim();
+  }
+
+  // 3) 高亮关键词
+  function hilite(text, kw){
+    if(!kw) return text;
+    const esc = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replace(new RegExp(esc, 'ig'), m => `<span style="background:#fff59d">${m}</span>`);
+  }
+
+  // 4) 渲染结果
+  (function render(){
+    const q = getQuery();
+    const box = document.getElementById('results');
+
+    if(!q){
+      box.innerHTML = `<div style="color:#666;padding:12px 0">请输入关键词后搜索。</div>`;
+      return;
+    }
+
+    const kw = q.toLowerCase();
+    const hit = INDEX.filter(it =>
+      (it.title||'').toLowerCase().includes(kw) ||
+      (it.text||'').toLowerCase().includes(kw)
+    );
+
+    if(hit.length === 0){
+      box.innerHTML = `
+        <div style="color:#666;padding:12px 0">
+          找不到与 "<b>${q}</b>" 相符的内容。<br><br>
+          建议：检查关键词是否有误，或换用更常见的词语。
+        </div>`;
+      return;
+    }
+
+    box.innerHTML = hit.map(it => `
+      <div style="padding:12px 0;border-bottom:1px solid #eee">
+        <a href="${it.url}" style="font-size:16px;font-weight:600;text-decoration:none">
+          ${hilite(it.title, q)}
+        </a>
+        <p style="margin:6px 0 0;color:#555">${hilite((it.text||'').slice(0,120), q)}...</p>
+        <div style="font-size:12px;color:#888">${it.url}</div>
+      </div>
+    `).join('');
+  })();
+</script>
 
         <div class="foot">
                <div class="px1220"><!-- 版权内容请在本组件"内容配置-版权"处填写 -->
