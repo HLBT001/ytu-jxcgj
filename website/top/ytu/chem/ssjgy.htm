@@ -872,8 +872,23 @@ function setHomepagea1067869a()
     });
   });
 </script>
+<!-- 强制把两个搜索表单改成 GET，并把 action 统一成 ssjgy.htm -->
 <script>
-// 不改原表单/脚本，仅在提交时改为 GET 跳到 ?q=xxx
+(function () {
+  function forceGet(formId) {
+    var f = document.getElementById(formId);
+    if (!f) return;
+    f.method = 'get';
+    f.action = 'ssjgy.htm';
+  }
+  forceGet('au3a'); // PC 搜索表单
+  forceGet('au7a'); // 移动端搜索表单
+})();
+    
+</script>
+
+<!-- 提交时改为跳转到 ssjgy.htm?q=关键词（不改你原来的校验脚本，只负责跳转） -->
+<script>
 (function () {
   function hook(formId, inputId) {
     var f = document.getElementById(formId);
@@ -881,7 +896,6 @@ function setHomepagea1067869a()
     if (!f || !kwInput) return;
 
     f.addEventListener('submit', function (e) {
-      // 允许原 onsubmit 校验运行，但最终我们统一改为跳转
       var kw = (kwInput.value || '').trim();
       if (!kw) { alert('请输入你要检索的内容！'); e.preventDefault(); return false; }
       e.preventDefault();
@@ -890,13 +904,25 @@ function setHomepagea1067869a()
       return false;
     }, true);
   }
-  // PC 表单：id="au3a"，输入框 id="showkeycode1067864"
-  hook('au3a', 'showkeycode1067864');
-  // 移动端表单：id="au7a"，输入框 id="showkeycode1067870"
-  hook('au7a', 'showkeycode1067870');
+  hook('au3a', 'showkeycode1067864'); // PC
+  hook('au7a', 'showkeycode1067870'); // 移动
 })();
-</script>            
+</script>
+
+<!-- 兜底：如果 URL 上带了旧系统参数（如 wbtreeid），自动清理为可用的地址 -->
+<script>
+(function () {
+  var p = new URLSearchParams(location.search);
+  if (p.has('wbtreeid') || p.has('lucenenewssearchkey') || p.has('_lucenesearchtype')) {
+    var q = p.get('q');
+    location.replace(q ? ('ssjgy.htm?q=' + encodeURIComponent(q)) : 'ssjgy.htm');
+  }
+})();
+</script>
+
+
 </body>
 </html>
+
 
 
