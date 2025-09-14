@@ -1175,15 +1175,20 @@ function setHomepagea1067869a()
 <script>
     window.onload = function() {
         try {
-            // 检查某个页面或资源的状态
+            // 发起一个请求来检查页面状态
             fetch(window.location.href)
                 .then(response => {
                     if (response.status === 405) {
+                        // 如果服务器返回405错误，跳转到指定页面
                         window.location.href = "ssjgy.htm";
                     }
                 })
-                .catch(error => console.error('Error checking 405 status:', error));
+                .catch(error => {
+                    // 捕获网络请求错误
+                    console.error('Error checking 405 status:', error);
+                });
         } catch (error) {
+            // 捕获执行错误
             console.error('Error:', error);
         }
     };
@@ -1192,6 +1197,7 @@ function setHomepagea1067869a()
     </body>
 
 </html>
+
 
 
 
