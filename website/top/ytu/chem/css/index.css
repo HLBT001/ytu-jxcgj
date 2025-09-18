@@ -170,19 +170,16 @@ body {
 }
 
 .s1-video {
+    display: block;          /* 关键：去掉内联基线空隙 */
     float: right;
     width: 580px;
     height: 380px;
     border: 10px solid #fff;
     border-radius: 10px;
-    position: relative;
     overflow: hidden;
-    margin-left: 70px
-}
-
-.s1-video a {
-    display: block;
-    padding-top: 65.51%
+    margin-left: 70px;
+    line-height: 0;          /* 保险，杜绝基线 */
+    object-fit: cover;       /* 填满容器不变形 */
 }
 
 .s1-jj {
@@ -715,3 +712,4 @@ body {
 .s1-bdk table {
     margin: 0 auto;
 }
+
