@@ -1,0 +1,97 @@
+/*样式*/
+.vsbcontent-table-container-outer { position: relative;}
+.vsbcontent-table-container
+{
+    width: 98%;
+    overflow-y: auto;
+    _overflow: auto;
+    margin: 2px;}
+.vsbcontent-table-container::-webkit-scrollbar
+{
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;}
+.vsbcontent-table-container::-webkit-scrollbar-thumb
+{
+    border-radius: 8px;
+    border: 3px solid #fff;
+    background-color: rgba(0, 0, 0, .3);}
+.vsbcontent-table-container-fade
+{
+    position: absolute;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    background-image: -webkit-linear-gradient(0deg, rgba(255,255,255,.5), #fff);
+    background-image: -moz-linear-gradient(0deg, rgba(255,255,255,.5), #fff);
+    background-image: -ms-linear-gradient(0deg, rgba(255,255,255,.5), #fff);
+    background-image: -o-linear-gradient(0deg, rgba(255,255,255,.5), #fff);
+    background-image: linear-gradient(0deg, rgba(255,255,255,.5), #fff);}
+iframe{
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;}
+#vsb_content TABLE{
+    overflow: auto;
+    width:100% !important;
+        
+            margin: 0 auto;}
+#vsb_content_100 TABLE{
+    overflow: auto;
+    width:100% !important;
+        
+            margin: 0 auto;}
+#vsb_content span{
+text-indent: inherit !important;}
+#vsb_content img{
+max-width: 100% !important;
+      
+    height: 100% !important;
+margin: 0 auto;}
+#vsb_content video{
+max-width: 100%;}
+
+@media screen and (max-width: 525px){
+#vsb_content video{
+max-width: 100%;
+display:block;}
+}
+
+#vsb_content_2 TABLE{
+    width: 85%;
+    overflow: auto;
+        
+            margin: 0 auto;}
+#vsb_content_2 span{
+text-indent: inherit !important;}
+#vsb_content_2 img{
+max-width: 100%;
+       
+    height: 100% !important;
+margin: 0 auto;}
+#vsb_content_2 video{
+max-width: 100%;}
+#vsb_content_4 IMG{
+border:none !important;
+height: 100% !important;
+
+    max-width: 100%;
+        margin: 0 auto;}
+#vsb_content_4 TABLE{
+border-collapse: collapse;
+    border: none !important;
+    max-width: 100%;
+    word-break: break-all;
+    overflow-x: scroll;
+    
+        margin: 0 auto;}
+#vsb_content_4 .vsbcontent_start{
+    text-indent: 0em !important;}
+#vsb_content_4 .vsbcontent_end{
+ text-indent: 0em !important;}
+
+#vsb_content_2 P{
+line-height: 150%;
+    text-indent: 2em;
+    font-size: 14px;
+    word-break: break-all;}
