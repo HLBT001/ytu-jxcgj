@@ -715,3 +715,22 @@ body {
 .s1-bdk table {
     margin: 0 auto;
 }
+
+/* 1) 取消旧结构里的占位写法（如果页面里已不再使用 <a> 包裹视频） */
+.s1-video a { padding-top: 0 !important; }
+
+/* 2) 把 video 当块级元素，并让它填满容器 */
+.s1-video { 
+  display: block;      /* 如果 .s1-video 用在 <video> 上，这条能消除内联基线缝隙 */
+  line-height: 0;      /* 避免基线空隙 */
+}
+
+.s1-video video,       /* 兼容你未来用 <div class="s1-video"><video>…结构 */
+.s1-video {            /* 现在你是 <video class="s1-video">…结构 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* 固定高宽时铺满，不变形 */
+}
+
+/* 如果仍要固定容器尺寸，保留你原来的宽高与边框 */
+
